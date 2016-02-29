@@ -68,7 +68,7 @@ chmod +x $BUILD_DIR/bin/runtests
 echo "----> Force.com deploy phase"
 
 set +e
-set -v
+#set -v
 
 regex='"app_info":\{"id":"([0-9a-z-]*)'
 [[ $RECEIVE_DATA =~ $regex ]]
@@ -88,7 +88,6 @@ do
 
   curl_output=$(curl -u $HEROKU_LOGIN:$HEROKU_PASSWORD "https://api.heroku.com/apps/$APP_ID/config-vars"   -H "Accept: application/vnd.heroku+json; version=3")
   
-  echo "curl output:\n$curl_output"
 done
 
 export FORCE_COM_ALM_URL=${BASH_REMATCH[1]}
