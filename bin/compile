@@ -51,7 +51,7 @@ if echo $RECEIVE_DATA | grep -q $TARBALL_PATTERN; then
     GITHUB_SHA=$(echo $RECEIVE_DATA | sed "s|.*$TARBALL_PATTERN.*|\1|")
     #echo "GITHUB_SHA: $GITHUB_SHA"
     #echo "$GITHUB_SHA" > $BUILD_TOOL_DEST/SOURCE_VERSION
-else
+#else
     #echo "GITHUB_SHA not found"
 fi
 
