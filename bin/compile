@@ -8,6 +8,10 @@ set -eo pipefail
 
 env_dir=$3
 
+indent() {
+  sed -u 's/^/       /'
+}
+
 export_env_dir() {
   whitelist_regex=${2:-'^(FORCE_COM_ALM_|HEROKU_)'}
   blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
@@ -24,9 +28,9 @@ export_env_dir
 export BUILD_DIR=$1
 
 
-echo "BUILD_DIR: $BUILD_DIR"
-echo "SOURCE_VERSION: $SOURCE_VERSION"
-echo "RECEIVE_DATA: $RECEIVE_DATA"
+#echo "BUILD_DIR: $BUILD_DIR"
+#echo "SOURCE_VERSION: $SOURCE_VERSION"
+#echo "RECEIVE_DATA: $RECEIVE_DATA"
 
 BUILD_TOOL_URL=https://github.com/forcedotcom/force-com-buildpack/releases/download/1.0.0-DEMO-4/driver-prototype.jar
 JAR_NAME=appcloud-client.jar
@@ -45,10 +49,10 @@ wget $BUILD_TOOL_URL -O $BUILD_TOOL_JAR
 TARBALL_PATTERN='"source_url":.*\.gz/\([A-Za-z0-9]*\)'
 if echo $RECEIVE_DATA | grep -q $TARBALL_PATTERN; then
     GITHUB_SHA=$(echo $RECEIVE_DATA | sed "s|.*$TARBALL_PATTERN.*|\1|")
-    echo "GITHUB_SHA: $GITHUB_SHA"
-    echo "$GITHUB_SHA" > $BUILD_TOOL_DEST/SOURCE_VERSION
+    #echo "GITHUB_SHA: $GITHUB_SHA"
+    #echo "$GITHUB_SHA" > $BUILD_TOOL_DEST/SOURCE_VERSION
 else
-    echo "GITHUB_SHA not found"
+    #echo "GITHUB_SHA not found"
 fi
 
 # write out testrunner script
@@ -73,8 +77,8 @@ set +e
 regex='"app_info":\{"id":"([0-9a-z-]*)'
 [[ $RECEIVE_DATA =~ $regex ]]
 APP_ID=${BASH_REMATCH[1]}
-echo $BASH_REMATCH
-echo "APP_ID=$APP_ID"
+#echo $BASH_REMATCH
+#echo "APP_ID=$APP_ID"
 
 let "max_wait = 300"
 let wait_time=0
@@ -82,7 +86,7 @@ regex='"FORCE_COM_ALM_URL":"(.*\.salesforce.com)"'
 
 until [[ ($curl_output =~ $regex) || ($wait_time -gt $max_wait)  ]]
 do
-  echo "Waiting $wait_time seconds for FORCE_COM_ALM_URL resource..."
+  echo "Waiting $wait_time seconds for FORCE_COM_ALM_URL resource..." | indent
   sleep $wait_time
   let "wait_time = $wait_time + 10"
 
@@ -97,8 +101,8 @@ if [[ ($wait_time -gt $max_wait) ]]
 then 
   echo "Gave up waiting for FORCE_COM_ALM_URL resource (timeout)"
   exit 1
-fi
+fi | indent
 
-echo "FORCE_COM_ALM_URL: $FORCE_COM_ALM_URL"
+#echo "FORCE_COM_ALM_URL: $FORCE_COM_ALM_URL"
 
 java -cp $BUILD_TOOL_JAR -DforceComUrlFile=$env_dir/FORCE_COM_ALM_URL Main
