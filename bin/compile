@@ -105,4 +105,4 @@ fi | indent
 
 #echo "FORCE_COM_ALM_URL: $FORCE_COM_ALM_URL"
 
-java -cp $BUILD_TOOL_JAR -DforceComUrlFile=$env_dir/FORCE_COM_ALM_URL Main
+java -cp $BUILD_TOOL_JAR -DforceComUrlFile=$env_dir/FORCE_COM_ALM_URL Main | indent
