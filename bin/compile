@@ -13,7 +13,7 @@ indent() {
 }
 
 export_env_dir() {
-  whitelist_regex=${2:-$"^(SALESFORCE_|HEROKU_)'}
+  whitelist_regex=${2:-$'^(SALESFORCE_|HEROKU_)'}
   blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
   if [ -d "$env_dir" ]; then
     for e in $(ls $env_dir); do
