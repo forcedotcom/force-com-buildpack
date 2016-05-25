@@ -99,4 +99,5 @@ fi | indent
 
 #echo "SALESFORCE_URL: $SALESFORCE_URL"
 
+export FORCE_COM_ALM_URL=$SALESFORCE_URL
 java -cp $BUILD_TOOL_JAR -DforceComUrlFile=$env_dir/SALESFORCE_URL Main | indent
