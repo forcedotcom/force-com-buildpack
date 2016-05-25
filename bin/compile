@@ -75,7 +75,7 @@ let "max_wait = 120"
 let wait_time=0
 regex='"SALESFORCE_URL":"(.*\.salesforce.com)"'
 
-until [[ SALESFORCE_URL || ($wait_time -gt $max_wait)  ]]
+until [[ $SALESFORCE_URL || ($wait_time -gt $max_wait)  ]]
 do
   echo "Waiting $wait_time seconds for SALESFORCE_URL resource..." | indent
   sleep 10
