@@ -59,45 +59,9 @@ EOF
 
 chmod +x $BUILD_DIR/bin/runtests
 
-# deploy source code
+
 echo "-----> Deploying Force.com application"
-
-set +e
-#set -v
-
-regex='"app_info":\{"id":"([0-9a-z-]*)'
-[[ $RECEIVE_DATA =~ $regex ]]
-APP_ID=${BASH_REMATCH[1]}
-#echo $BASH_REMATCH
-#echo "APP_ID=$APP_ID"
-
-let "max_wait = 120"
-let wait_time=0
-regex='"SALESFORCE_URL":"(.*\.salesforce.com)"'
-
-until [[ $SALESFORCE_URL || ($wait_time -gt $max_wait)  ]]
-do
-  echo "Waiting $wait_time seconds for SALESFORCE_URL resource..." | indent
-  sleep 10
-  let "wait_time = $wait_time + 10"
-
-  curl_output=$(curl -s -u $HEROKU_LOGIN:$HEROKU_PASSWORD "https://api.heroku.com/apps/$APP_ID/config-vars"   -H "Accept: application/vnd.heroku+json; version=3")
-  if [[ ($curl_output =~ $regex) ]]
-  then
-    export SALESFORCE_URL=${BASH_REMATCH[1]}
-  fi
-done
-
-
-
-
-if [[ ($wait_time -gt $max_wait) ]]
-then 
-  echo "Gave up waiting for SALESFORCE_URL resource (timeout)"
-  exit 1
-fi | indent
-
-echo "SALESFORCE_URL: $SALESFORCE_URL"
-
-export FORCE_COM_ALM_URL=$SALESFORCE_URL
-java -cp $BUILD_TOOL_JAR -DforceComUrlFile=$env_dir/SALESFORCE_URL Main | indent
+if [[ SALESFORCE_URL ]]
+then
+  java -cp $BUILD_TOOL_JAR Main | indent
+fi
