@@ -54,7 +54,7 @@ cat > $SALESFORCE_DIR/deploy << EOF
 if [[ \$SALESFORCE_URL ]]
 then
   echo "Deploying Force.com application"
-  java -cp .salesforce/lib/$JAR_NAME Main 
+  java -cp .salesforce/lib/$JAR_NAME Main -Dhttps.protocols=TLSv1.1,TLSv1.2
 else
   echo "Force.com deployment failed because SALESFORCE_URL is not configured"
   exit 1
